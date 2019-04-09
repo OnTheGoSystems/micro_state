@@ -1,6 +1,6 @@
 {
   "name": "@tarvit/micro_store",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple and minimalistic pure JS Datastore with publish/subscribe.",
   "main": "index.js",
   "scripts": {
