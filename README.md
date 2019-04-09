@@ -1,23 +1,7 @@
 # MicroState
 ## Simple and minimalistic pure JS router for clientside
 
-# Commands
-
-## install dependencies
-$ yarn
-
-## test
-$ yarn test
-
-## build
-$ yarn build
-
-## release
-$ npm publish
-
-
-## Usage example
-
+# Usage example
 ## Define your Sample Store
 ```js
 import { MicroState } from "@tarvit/micro_state";
@@ -27,6 +11,7 @@ import SampleRequest from "../services/requests/sample_request";
 
 class SampleStore {
   constructor() {
+    // define default values for data you are going to store
     this.state = {
       data: {
         values: [],
@@ -35,6 +20,7 @@ class SampleStore {
     }
   }
 
+  // write your getters
   getValues() {
     return this.state.data.values;
   }
@@ -43,25 +29,28 @@ class SampleStore {
     return this.state.data.loaded;
   }
 
+  // implement your data update
   loadValues(page = 0) {
     const req = SampleRequest.load(page);
     req.then((response)=> {
       const json = JSON.parse(response);
-      this.state.data.loaded = true;
-      this.state.data.values = json.data.values;
+      this.setValues(json.data.values)
     });
   }
 
+  // define a setter to automatically dispatch notifications about data change
   setValues(values) {
     this.trigger(`values.loaded`);
     this.state.data.values = values;
     this.state.data.loaded = true;
   }
 
+  // create wrapper to make it easier to subscribe to the event
   bindValuesLoaded(key, callback) {
     this.bind(`values.loaded`, key, callback);
   }
 
+  // and oposite wrapper to unsubscribe
   unbindValuesLoaded(key) {
     this.unbind(`values.loaded`, key);
   }
@@ -112,3 +101,17 @@ export default class StateDashboard extends Component {
 }
 ```
 
+
+# Commands for development
+
+## install dependencies
+$ yarn
+
+## test
+$ yarn test
+
+## build
+$ yarn build
+
+## release
+$ npm publish
